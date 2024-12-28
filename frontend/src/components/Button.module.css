@@ -1,4 +1,5 @@
 .button {
+  white-space: nowrap;
   width: auto;
   height: 2.25rem;
   padding: 0 0.75rem;

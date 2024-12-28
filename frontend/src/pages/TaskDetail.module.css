@@ -1,0 +1,42 @@
+.titleRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.formTitle {
+  font: var(--font-heading);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.description {
+  font: var(--font-body);
+}
+
+.title {
+  font: var(--font-label);
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  column-gap: 1.5rem;
+  align-items: flex-end;
+  margin-top: 2rem;
+}
+
+.assignee {
+  font: var(--font-body);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
