@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createTask } from "src/api/tasks";
+import { createTask, updateTask } from "src/api/tasks";
 import { Button, TextField } from "src/components";
 import styles from "src/components/TaskForm.module.css";
 
@@ -40,6 +40,7 @@ interface TaskFormErrors {
 export function TaskForm({ mode, task, onSubmit }: TaskFormProps) {
   const [title, setTitle] = useState<string>(task?.title || "");
   const [description, setDescription] = useState<string>(task?.description || "");
+  const [assignee, setAssignee] = useState<string>(task?.assignee?._id);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<TaskFormErrors>({});
 
@@ -51,28 +52,54 @@ export function TaskForm({ mode, task, onSubmit }: TaskFormProps) {
       return;
     }
     setLoading(true);
-    createTask({ title, description })
-      .then((result) => {
-        if (result.success) {
-          // clear the form
-          setTitle("");
-          setDescription("");
-          // only call onSubmit if it's NOT undefined
-          if (onSubmit) onSubmit(result.data);
-        } else {
-          // You should always clearly inform the user when something goes wrong.
-          // In this case, we're just doing an `alert()` for brevity, but you'd
-          // generally want to show some kind of error state or notification
-          // within your UI. If the problem is with the user's input, then use
-          // the error states of your smaller components (like the `TextField`s).
-          // If the problem is something we don't really control, such as network
-          // issues or an unexpected exception on the server side, then use a
-          // banner, modal, popup, or similar.
-          alert(result.error);
-        }
-        setLoading(false);
+    const assigneeToSend = assignee === "" ? undefined : assignee;
+    if (mode === "create") {
+      createTask({ title, description, assignee: assigneeToSend })
+        .then((result) => {
+          if (result.success) {
+            if (onSubmit) onSubmit(result.data);
+            // clear the form
+            setTitle("");
+            setDescription("");
+            setAssignee("");
+            // only call onSubmit if it's NOT undefined
+          } else {
+            // You should always clearly inform the user when something goes wrong.
+            // In this case, we're just doing an `alert()` for brevity, but you'd
+            // generally want to show some kind of error state or notification
+            // within your UI. If the problem is with the user's input, then use
+            // the error states of your smaller components (like the `TextField`s).
+            // If the problem is something we don't really control, such as network
+            // issues or an unexpected exception on the server side, then use a
+            // banner, modal, popup, or similar.
+            alert(result.error);
+          }
+          setLoading(false);
+        })
+        .catch((reason) => alert(reason));
+    } else if (mode === "edit") {
+      updateTask({
+        _id: task!._id,
+        title,
+        description,
+        isChecked: task?.isChecked || false,
+        dateCreated: task!.dateCreated,
+        assignee: assigneeToSend,
       })
-      .catch((reason) => alert(reason));
+        .then((result) => {
+          if (result.success) {
+            // clear the form
+            if (onSubmit) onSubmit(result.data);
+            setTitle("");
+            setDescription("");
+            setAssignee("");
+          } else {
+            alert(result.error);
+          }
+          setLoading(false);
+        })
+        .catch((reason) => alert(reason));
+    }
   };
 
   const formTitle = mode === "create" ? "New task" : "Edit task";
@@ -102,8 +129,17 @@ export function TaskForm({ mode, task, onSubmit }: TaskFormProps) {
           value={description}
           onChange={(event) => setDescription(event.target.value)}
         />
+      </div>
+      <div className={styles.formRow}>
         {/* set `type="primary"` on the button so the browser doesn't try to
         handle it specially (because it's inside a `<form>`) */}
+        <TextField
+          className={styles.textField}
+          data-testid="task-assignee-input"
+          label="Assignee ID (optional)"
+          value={assignee}
+          onChange={(event) => setAssignee(event.target.value)}
+        />
         <Button
           kind="primary"
           type="button"
