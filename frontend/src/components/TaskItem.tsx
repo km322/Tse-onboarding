@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Task, updateTask } from "src/api/tasks";
-import { CheckButton } from "src/components";
+import { CheckButton, UserTag } from "src/components";
 import styles from "src/components/TaskItem.module.css";
 
 export interface TaskItemProps {
@@ -14,7 +15,7 @@ export function TaskItem({ task: initialTask }: TaskItemProps) {
   const handleToggleCheck = () => {
     // your code here
     setLoading(true);
-    updateTask({ ...task, isChecked: !task.isChecked })
+    updateTask({ ...task, assignee: task.assignee?._id, isChecked: !task.isChecked })
       .then((result) => {
         if (result.success) {
           setTask(result.data);
@@ -34,9 +35,16 @@ export function TaskItem({ task: initialTask }: TaskItemProps) {
     <div className={styles.item}>
       {/* render CheckButton here */}
       <CheckButton checked={task.isChecked} onPress={handleToggleCheck} disabled={isLoading} />
-      <div className={checkedStyle}>
-        <span className={styles.title}>{task.title}</span>
-        {task.description && <span className={styles.description}>{task.description}</span>}
+      <div className={styles.boarder}>
+        <div className={checkedStyle}>
+          <Link to={`/task/${task._id}`} className={styles.title}>
+            {task.title}
+          </Link>
+          {task.description && <span className={styles.description}>{task.description}</span>}
+        </div>
+        <div className={styles.width}>
+          <UserTag assignee={task.assignee} />
+        </div>
       </div>
     </div>
   );

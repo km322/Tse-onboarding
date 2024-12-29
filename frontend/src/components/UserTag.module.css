@@ -1,0 +1,22 @@
+.userTag {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 90%;
+}
+
+.image {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.userName {
+  font: var(--font-body);
+}
+
+.userTag span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
