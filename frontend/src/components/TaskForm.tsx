@@ -75,6 +75,7 @@ export function TaskForm({ mode, task, onSubmit }: TaskFormProps) {
             alert(result.error);
           }
           setLoading(false);
+          window.location.reload();
         })
         .catch((reason) => alert(reason));
     } else if (mode === "edit") {
@@ -97,6 +98,7 @@ export function TaskForm({ mode, task, onSubmit }: TaskFormProps) {
             alert(result.error);
           }
           setLoading(false);
+          window.location.reload();
         })
         .catch((reason) => alert(reason));
     }

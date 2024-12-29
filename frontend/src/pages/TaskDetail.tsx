@@ -35,7 +35,6 @@ export function TaskDetail() {
   const handleSave = (updateTask: Task) => {
     setLoading(true);
     setTask(updateTask);
-    window.location.reload();
     setEditing(false);
     setLoading(false);
   };
