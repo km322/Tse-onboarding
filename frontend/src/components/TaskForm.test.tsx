@@ -141,7 +141,7 @@ describe("TaskForm", () => {
       description: "Updated description",
       isChecked: false,
       dateCreated: mockTask.dateCreated,
-      assignee: "",
+      assignee: undefined,
     });
     await waitFor(() => {
       // If the test ends before all state updates and rerenders occur, we'll
