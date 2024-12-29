@@ -28,12 +28,6 @@ export function TaskDetail() {
     }
   }, [id]);
 
-  useEffect(() => {
-    console.log("Task:", task);
-    setLoading(false);
-    setEditing(false);
-  }, [task]);
-
   const handleSubmit = () => {
     setEditing(true);
   };
@@ -41,6 +35,8 @@ export function TaskDetail() {
   const handleSave = (updateTask: Task) => {
     setLoading(true);
     setTask(updateTask);
+    setEditing(false);
+    setLoading(false);
   };
 
   return (
